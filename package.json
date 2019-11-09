@@ -1,0 +1,20 @@
+{
+  "name": "es.jacksparrot.localization",
+  "version": "1.0.0",
+  "displayName": "jacksparrot Localization",
+  "description": "Utility to localize your project",
+  "unity": "2018.1",
+  "unityRelease": "0f1",
+  "dependencies": {
+    "es.jacksparrot.json": "https://github.com/JackSParrot/json-pkg.git",
+    "es.jacksparrot.utils": "https://github.com/JackSParrot/utils-pkg.git"
+ },
+ "keywords": [
+    "localization"
+  ],
+  "author": {
+    "name": "Francisco Ruiz",
+    "email": "franciscoruizpons@gmail.com",
+    "url": ""
+  } 
+}
