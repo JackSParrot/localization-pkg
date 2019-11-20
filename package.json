@@ -7,7 +7,8 @@
   "unityRelease": "0f1",
   "dependencies": {
     "es.jacksparrot.json": "https://github.com/JackSParrot/json-pkg.git",
-    "es.jacksparrot.utils": "https://github.com/JackSParrot/utils-pkg.git"
+    "es.jacksparrot.utils": "https://github.com/JackSParrot/utils-pkg.git",
+    "com.unity.textmeshpro": "2.0.0"
  },
  "keywords": [
     "localization"

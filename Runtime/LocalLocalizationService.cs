@@ -4,14 +4,14 @@ using JackSParrot.Utils;
 
 namespace JackSParrot.Services.Localization
 {
-    public interface ILocalizationManager
+    public interface ILocalizationService
     {
         bool Initialized { get; }
         void Initialize(System.Action onFinished);
         string GetLocalizedString(string key);
     }
 
-    public class LocalLocalizationManager : ILocalizationManager
+    public class LocalLocalizationService : ILocalizationService
     {
         SystemLanguage _defaultLanguage;
         Dictionary<SystemLanguage, string> LocalizationFiles = new Dictionary<SystemLanguage, string>
@@ -26,7 +26,7 @@ namespace JackSParrot.Services.Localization
         Localization _currentLocalization;
         public bool Initialized { get; private set; }
 
-        public LocalLocalizationManager(SystemLanguage defaultLanguage = SystemLanguage.English)
+        public LocalLocalizationService(SystemLanguage defaultLanguage = SystemLanguage.English)
         {
             _defaultLanguage = defaultLanguage;
             _currentLocalization = new Localization();

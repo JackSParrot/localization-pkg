@@ -2,7 +2,8 @@
     "name": "JackSParrotLocalization.Runtime",
     "references": [
         "JackSParrotUtils.Runtime",
-        "JackSParrotJSON.Runtime"
+        "JackSParrotJSON.Runtime",
+        "Unity.TextMeshPro"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
