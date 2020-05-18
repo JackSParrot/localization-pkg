@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.IO;
 using JackSParrot.JSON;
@@ -95,5 +95,6 @@ public class UpdateLocalizationWindow : EditorWindow
             Debug.Log(string.Format("Updated Localization {0} at {1}", kvp.Key, path));
         }
         status = "Localization files saved to " + localizationFolder;
+        AssetDatabase.Refresh();
     }
 }
