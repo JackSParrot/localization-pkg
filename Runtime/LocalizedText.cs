@@ -53,7 +53,6 @@ namespace JackSParrot.Services.Localization
             }
             while (!service.Initialized)
             {
-                service = SharedServices.GetService<ILocalizationService>();
                 yield return new WaitForSeconds(1.0f);
             }
             if(_text != null)
