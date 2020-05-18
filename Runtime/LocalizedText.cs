@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using JackSParrot.Utils;
@@ -12,14 +12,16 @@ namespace JackSParrot.Services.Localization
         string _key = string.Empty;
         Text _text;
         TextMeshProUGUI _tmpText;
+        TextMeshPro _tmpTextPro;
 
-        void Awake()
+        void Start()
         {
             _text = GetComponent<Text>();
             _tmpText = GetComponent<TextMeshProUGUI>();
-            if(_text == null && _tmpText == null)
+            _tmpTextPro = GetComponent<TextMeshPro>();
+            if (_text == null && _tmpText == null && _tmpTextPro == null)
             {
-                SharedServices.GetService<ICustomLogger>()?.LogError("Added a LocalizedText component to a gameobject with no ui text");
+                Debug.LogError("Added a LocalizedText component to a gameobject with no ui text");
                 return;
             }
             if(string.IsNullOrEmpty(_key))
@@ -32,6 +34,10 @@ namespace JackSParrot.Services.Localization
                 {
                     _key = _tmpText.text;
                 }
+                else if(_tmpTextPro != null)
+                {
+                    _key = _tmpTextPro.text;
+                }
             }
             StartCoroutine(updateText());
         }
@@ -39,7 +45,13 @@ namespace JackSParrot.Services.Localization
         IEnumerator updateText()
         {
             var service = SharedServices.GetService<ILocalizationService>();
-            while (service == null || !service.Initialized)
+            if(service == null)
+            {
+                service = new LocalLocalizationService();
+                service.Initialize(() => Debug.Log("LocalizationService Initialized"));
+                SharedServices.RegisterService<ILocalizationService>(service);
+            }
+            while (!service.Initialized)
             {
                 service = SharedServices.GetService<ILocalizationService>();
                 yield return new WaitForSeconds(1.0f);
@@ -51,6 +63,10 @@ namespace JackSParrot.Services.Localization
             else if(_tmpText != null)
             {
                 _tmpText.text = service.GetLocalizedString(_key);
+            }
+            else if(_tmpTextPro != null)
+            {
+                _tmpTextPro.text = service.GetLocalizedString(_key);
             }
             StopAllCoroutines();
             enabled = false;
