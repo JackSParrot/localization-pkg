@@ -1,6 +1,7 @@
 # es.jacksparrot.localization unity package
 
-## Requirements
+## Dependencies
+You need to import the following packages before importing this package
 1. TextMeshPro
 2. https://github.com/JackSParrot/utils-pkg
 3. https://github.com/JackSParrot/json-pkg
