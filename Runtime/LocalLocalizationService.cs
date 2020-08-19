@@ -67,7 +67,7 @@ namespace JackSParrot.Services.Localization
 
         public void Dispose()
         {
-            _defaultLanguage = defaultLanguage;
+            _defaultLanguage = SystemLanguage.English;
             _currentLocalization = new Localization();
             Initialized = false;
         }
