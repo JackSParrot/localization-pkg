@@ -1,10 +1,10 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using JackSParrot.Utils;
 
 namespace JackSParrot.Services.Localization
 {
-    public interface ILocalizationService
+    public interface ILocalizationService : System.IDisposable
     {
         bool Initialized { get; }
         void Initialize(System.Action onFinished);
@@ -63,6 +63,13 @@ namespace JackSParrot.Services.Localization
         public string GetLocalizedString(string key)
         {
             return _currentLocalization.GetString(key);
+        }
+
+        public void Dispose()
+        {
+            _defaultLanguage = defaultLanguage;
+            _currentLocalization = new Localization();
+            Initialized = false;
         }
     }
 }
