@@ -7,7 +7,7 @@ using System;
 
 public class UpdateLocalizationWindow : EditorWindow
 {
-    [MenuItem("Localization/Download Latest")]
+    [MenuItem("JackSParrot/Update Localization")]
     static void Init()
     {
         UpdateLocalizationWindow window = (UpdateLocalizationWindow)GetWindow(typeof(UpdateLocalizationWindow));
