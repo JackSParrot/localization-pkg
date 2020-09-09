@@ -6,8 +6,8 @@
   "unity": "2018.1",
   "unityRelease": "0f1",
   "dependencies": {
-    "es.jacksparrot.json": "https://github.com/JackSParrot/json-pkg.git",
-    "es.jacksparrot.utils": "https://github.com/JackSParrot/utils-pkg.git",
+    "es.jacksparrot.json": "1.0.0",
+    "es.jacksparrot.utils": "1.0.0",
     "com.unity.textmeshpro": "2.0.0"
  },
  "keywords": [
@@ -16,6 +16,6 @@
   "author": {
     "name": "Francisco Ruiz",
     "email": "franciscoruizpons@gmail.com",
-    "url": ""
+    "url": "https://github.com/JackSParrot/localization-pkg"
   } 
 }
