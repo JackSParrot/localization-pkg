@@ -44,7 +44,10 @@ namespace JackSParrot.Services.Localization
 
         private void OnDestroy()
         {
-            _service.OnLocalizationChanged -= UpdateText;
+            if(_service != null)
+            {
+                _service.OnLocalizationChanged -= UpdateText;
+            }
         }
 
         void UpdateText()
