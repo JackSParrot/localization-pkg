@@ -21,7 +21,7 @@ namespace JackSParrot.Services.Localization
             {SystemLanguage.Spanish, "es"},
             {SystemLanguage.English, "en"},
             {SystemLanguage.French,  "fr"},
-            {SystemLanguage.German,  "ge"},
+            {SystemLanguage.German,  "de"},
             {SystemLanguage.Italian, "it"}
         };
 
