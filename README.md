@@ -1,5 +1,8 @@
 # es.jacksparrot.localization unity package
 
+## server proposal in google drive
+https://drive.google.com/drive/folders/1WdzFjUFU7jNKmaMaVAKayvmjQUYpCVzW?usp=sharing
+
 ## Dependencies
 You need to import the following packages before importing this package
 1. TextMeshPro
