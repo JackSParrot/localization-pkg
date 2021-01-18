@@ -36,10 +36,15 @@ namespace JackSParrot.Services.Localization
             if (_service == null)
             {
                 _service = new LocalLocalizationService();
+                _service.OnLocalizationChanged += UpdateText;
                 _service.Initialize(UpdateText);
                 SharedServices.RegisterService<ILocalizationService>(_service);
             }
-            _service.OnLocalizationChanged += UpdateText;
+            else
+            {
+                _service.OnLocalizationChanged += UpdateText;
+                UpdateText();
+            }
         }
 
         private void OnDestroy()
