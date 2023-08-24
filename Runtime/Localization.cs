@@ -28,7 +28,7 @@ namespace JackSParrot.Services.Localization
 
         public string GetString(string key)
         {
-            return Localized.ContainsKey(key) ? Localized[key] : key;
+            return Localized.TryGetValue(key, out string value) ? value : key;
         }
     }
 }

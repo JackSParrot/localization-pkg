@@ -1,21 +1,21 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
-using JackSParrot.Utils;
 
 namespace JackSParrot.Services.Localization
 {
-    public interface ILocalizationService : System.IDisposable
+    public abstract class ALocalizationService : AService
     {
-        event System.Action OnLocalizationChanged;
-        bool Initialized { get; }
-        void Initialize(System.Action onFinished);
-        void SetLanguage(SystemLanguage newLanguage);
-        string GetLocalizedString(string key);
+        public Action OnLocalizationChanged;
+        
+        public bool Initialized { get; protected set; }
+        public abstract void   SetLanguage(SystemLanguage newLanguage);
+        public abstract string GetLocalizedString(string  key);
     }
 
-    public class LocalLocalizationService : ILocalizationService
+    public class LocalALocalizationService : ALocalizationService
     {
-        public event System.Action OnLocalizationChanged = delegate() { };
         private Dictionary<SystemLanguage, string> LocalizationFiles = new Dictionary<SystemLanguage, string>
         {
             {SystemLanguage.Spanish, "es"},
@@ -28,9 +28,9 @@ namespace JackSParrot.Services.Localization
         private SystemLanguage _defaultLanguage;
         private SystemLanguage _chosenLanguage;
         private Localization _currentLocalization;
-        public bool Initialized { get; private set; }
+        
 
-        public LocalLocalizationService(SystemLanguage defaultLanguage = SystemLanguage.English)
+        public LocalALocalizationService(SystemLanguage defaultLanguage = SystemLanguage.English)
         {
             _defaultLanguage = defaultLanguage;
             _chosenLanguage = Application.systemLanguage;
@@ -38,33 +38,37 @@ namespace JackSParrot.Services.Localization
             Initialized = false;
         }
 
-        public void SetLanguage(SystemLanguage newLanguage)
+        public override void SetLanguage(SystemLanguage newLanguage)
         {
             _chosenLanguage = newLanguage;
             Initialize();
         }
 
-        public void Initialize(System.Action onFinishedLoading = null)
+        public override List<Type> GetDependencies()
+        {
+            return new List<Type>();
+        }
+
+        public override IEnumerator Initialize()
         {
             Initialized = false;
             var language = _chosenLanguage;
             if(!LocalizationFiles.ContainsKey(language))
             {
                 language = _defaultLanguage;
-                SharedServices.GetService<ICustomLogger>()?.LogError("Chosen language is not available in localization files");
+                Debug.LogError("Chosen language is not available in localization files");
             }
             string fileName = "localization_" + LocalizationFiles[language];
             TextAsset content = Resources.Load<TextAsset>(fileName);
             if(content == null)
             {
-                SharedServices.GetService<ICustomLogger>()?.LogError("Can not load the localization file. Trying to load default localization file.");
+                Debug.LogError("Can not load the localization file. Trying to load default localization file.");
                 fileName = "localization_" + LocalizationFiles[_defaultLanguage];
                 content = Resources.Load<TextAsset>(fileName);
                 if(content == null)
                 {
-                    SharedServices.GetService<ICustomLogger>()?.LogError("Can not load the default localization file.");
-                    onFinishedLoading?.Invoke();
-                    return;
+                    Debug.LogError("Can not load the default localization file.");
+                    yield break;
                 }
             }
             try
@@ -73,19 +77,18 @@ namespace JackSParrot.Services.Localization
             }
             catch(System.Exception)
             {
-                SharedServices.GetService<ICustomLogger>()?.LogError("Error parsing localization file: " + fileName);
+                Debug.LogError("Error parsing localization file: " + fileName);
             }
             Initialized = true;
             OnLocalizationChanged();
-            onFinishedLoading?.Invoke();
         }
 
-        public string GetLocalizedString(string key)
+        public override string GetLocalizedString(string key)
         {
             return _currentLocalization.GetString(key);
         }
 
-        public void Dispose()
+        public override void Cleanup()
         {
             _defaultLanguage = SystemLanguage.English;
             _currentLocalization = new Localization();

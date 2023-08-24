@@ -1,6 +1,6 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using JackSParrot.Utils;
 using TMPro;
 
 namespace JackSParrot.Services.Localization
@@ -10,16 +10,16 @@ namespace JackSParrot.Services.Localization
         [SerializeField] private string _key = string.Empty;
         private Text _text;
         private TMP_Text _tmpText;
-        private ILocalizationService _service = null;
+        private ALocalizationService _service = null;
 
-        void Start()
+        IEnumerator Start()
         {
             _text = GetComponent<Text>();
             _tmpText = GetComponent<TextMeshProUGUI>();
             if (_text == null && _tmpText == null)
             {
                 Debug.LogError("Added a LocalizedText component to a gameobject with no ui text");
-                return;
+                yield break;
             }
             if(string.IsNullOrEmpty(_key))
             {
@@ -32,13 +32,13 @@ namespace JackSParrot.Services.Localization
                     _key = _tmpText.text;
                 }
             }
-            _service = SharedServices.GetService<ILocalizationService>();
+            _service = ServiceLocator.GetService<ALocalizationService>();
             if (_service == null)
             {
-                _service = new LocalLocalizationService();
+                _service = ScriptableObject.CreateInstance<LocalALocalizationService>();
                 _service.OnLocalizationChanged += UpdateText;
-                _service.Initialize(UpdateText);
-                SharedServices.RegisterService<ILocalizationService>(_service);
+                ServiceLocator.RegisterService(_service);
+                StartCoroutine(_service.Initialize());
             }
             else
             {
