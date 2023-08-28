@@ -33,18 +33,8 @@ namespace JackSParrot.Services.Localization
                 }
             }
             _service = ServiceLocator.GetService<ALocalizationService>();
-            if (_service == null)
-            {
-                _service = ScriptableObject.CreateInstance<LocalALocalizationService>();
-                _service.OnLocalizationChanged += UpdateText;
-                ServiceLocator.RegisterService(_service);
-                StartCoroutine(_service.Initialize());
-            }
-            else
-            {
-                _service.OnLocalizationChanged += UpdateText;
-                UpdateText();
-            }
+            _service.OnLocalizationChanged += UpdateText;
+            UpdateText();
         }
 
         private void OnDestroy()

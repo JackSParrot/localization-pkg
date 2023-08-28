@@ -8,39 +8,26 @@ namespace JackSParrot.Services.Localization
     public abstract class ALocalizationService : AService
     {
         public Action OnLocalizationChanged;
-        
-        public bool Initialized { get; protected set; }
         public abstract void   SetLanguage(SystemLanguage newLanguage);
         public abstract string GetLocalizedString(string  key);
     }
 
-    public class LocalALocalizationService : ALocalizationService
+    [CreateAssetMenu(fileName = "LocalLocalizationService", menuName = "JackSParrot/Services/LocalLocalizationService")]
+    public class LocalLocalizationService : ALocalizationService
     {
         private Dictionary<SystemLanguage, string> LocalizationFiles = new Dictionary<SystemLanguage, string>
         {
             {SystemLanguage.Spanish, "es"},
-            {SystemLanguage.English, "en"},
-            {SystemLanguage.French,  "fr"},
-            {SystemLanguage.German,  "de"},
-            {SystemLanguage.Italian, "it"}
+            {SystemLanguage.English, "en"}
         };
 
+        [SerializeField]
         private SystemLanguage _defaultLanguage;
-        private SystemLanguage _chosenLanguage;
-        private Localization _currentLocalization;
-        
-
-        public LocalALocalizationService(SystemLanguage defaultLanguage = SystemLanguage.English)
-        {
-            _defaultLanguage = defaultLanguage;
-            _chosenLanguage = Application.systemLanguage;
-            _currentLocalization = new Localization();
-            Initialized = false;
-        }
+        private Localization _currentLocalization = new Localization();
 
         public override void SetLanguage(SystemLanguage newLanguage)
         {
-            _chosenLanguage = newLanguage;
+            PlayerPrefs.SetInt("locale", (int)newLanguage);
             Initialize();
         }
 
@@ -51,8 +38,7 @@ namespace JackSParrot.Services.Localization
 
         public override IEnumerator Initialize()
         {
-            Initialized = false;
-            var language = _chosenLanguage;
+            SystemLanguage language = (SystemLanguage)PlayerPrefs.GetInt("locale", (int)_defaultLanguage);
             if(!LocalizationFiles.ContainsKey(language))
             {
                 language = _defaultLanguage;
@@ -79,8 +65,8 @@ namespace JackSParrot.Services.Localization
             {
                 Debug.LogError("Error parsing localization file: " + fileName);
             }
-            Initialized = true;
-            OnLocalizationChanged();
+            Status = EServiceStatus.Initialized;
+            OnLocalizationChanged?.Invoke();
         }
 
         public override string GetLocalizedString(string key)
@@ -90,9 +76,9 @@ namespace JackSParrot.Services.Localization
 
         public override void Cleanup()
         {
-            _defaultLanguage = SystemLanguage.English;
+            _defaultLanguage     = SystemLanguage.English;
             _currentLocalization = new Localization();
-            Initialized = false;
+            Status               = EServiceStatus.NotInitialized;
         }
     }
 }
